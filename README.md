@@ -1,6 +1,6 @@
 # Python Snippets 代码片段
 
-## Lazy Call
+## Lazy Function Call
 
 A decorator that allows partial matching in function parameter names, like in R.
 
