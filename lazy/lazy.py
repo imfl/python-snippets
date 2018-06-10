@@ -33,6 +33,61 @@ Put the decorator @lazy above your original function definition, like:
 from functools import wraps
 import inspect
 
+__all__ = ['lazy']
+
+def _partial_matching(p, names):
+    '''
+    Checks whether a partial name matches any of the complete names
+
+    Parameters
+    ----------
+    p : str
+        a partial name
+
+    names : iterable of str
+        collection of complete names
+
+    Returns
+    -------
+    (m, c) : m for match result, c for complete name(s)
+
+    | Case                    |  m | c                        |
+    |-------------------------|----|--------------------------|
+    | 1. Unambiguous match    |  1 | matched complete name    |
+    | 2. No match             |  0 | None                     |
+    | 3. Ambiguous match      | -1 | candidate complete names |
+
+    Doctest
+    -------
+    # Unambiguous match
+
+    >>> _partial_matching('pa', {'population_size', 'parsimony_coefficient'})
+    (1, 'parsimony_coefficient')
+
+    # No match
+
+    >>> _partial_matching('pe', {'population_size', 'parsimony_coefficient'})
+    (0, None)
+
+    # Ambiguous match
+
+    >>> names = {'population_size', 'parsimony_coefficient'}
+    >>> m, c = _partial_matching('p', names)
+    >>> m == -1
+    True
+    >>> set(c) == set({'population_size', 'parsimony_coefficient'})
+    True
+    '''
+    c = [x for x in names if x.startswith(p)]
+    m = len(c)
+    if m == 1:
+        c = c[0]
+    elif m == 0:
+        c = None
+    else:
+        m = -1
+    return (m, c)
+
 
 def lazy(f):
     '''
@@ -111,60 +166,6 @@ def lazy(f):
             complete[c] = partial[p]
         return f(*a, **complete)
     return g
-
-
-def _partial_matching(p, names):
-    '''
-    Checks whether a partial name matches any of the complete names
-
-    Parameters
-    ----------
-    p : str
-        Partial name.
-
-    names : iterable of str
-        Collection of complete names.
-
-    Returns
-    -------
-    (m, c) : m for match result, c for complete name(s)
-
-    | Case                    |  m | c                        |
-    |-------------------------|----|--------------------------|
-    | 1. Unambiguous match    |  1 | matched complete name    |
-    | 2. No match             |  0 | None                     |
-    | 3. Ambiguous match      | -1 | candidate complete names |
-
-    Doctest
-    -------
-    # Unambiguous match
-
-    >>> _partial_matching('pa', {'population_size', 'parsimony_coefficient'})
-    (1, 'parsimony_coefficient')
-
-    # No match
-
-    >>> _partial_matching('pe', {'population_size', 'parsimony_coefficient'})
-    (0, None)
-
-    # Ambiguous match
-
-    >>> names = {'population_size', 'parsimony_coefficient'}
-    >>> m, c = _partial_matching('p', names)
-    >>> m == -1
-    True
-    >>> set(c) == set({'population_size', 'parsimony_coefficient'})
-    True
-    '''
-    c = [x for x in names if x.startswith(p)]
-    m = len(c)
-    if m == 1:
-        c = c[0]
-    elif m == 0:
-        c = None
-    else:
-        m = -1
-    return (m, c)
 
 
 if __name__ == '__main__':
