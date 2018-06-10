@@ -33,6 +33,7 @@ Put the decorator @lazy above your original function definition, like:
 from functools import wraps
 import inspect
 
+
 __all__ = ['lazy']
 
 
