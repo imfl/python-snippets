@@ -35,6 +35,7 @@ import inspect
 
 __all__ = ['lazy']
 
+
 def _partial_matching(p, names):
     '''
     Checks whether a partial name matches any of the complete names
