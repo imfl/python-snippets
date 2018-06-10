@@ -62,17 +62,14 @@ def _partial_matching(p, names):
     Doctest
     -------
     # Unambiguous match
-
     >>> _partial_matching('pa', {'population_size', 'parsimony_coefficient'})
     (1, 'parsimony_coefficient')
 
     # No match
-
     >>> _partial_matching('pe', {'population_size', 'parsimony_coefficient'})
     (0, None)
 
     # Ambiguous match
-
     >>> names = {'population_size', 'parsimony_coefficient'}
     >>> m, c = _partial_matching('p', names)
     >>> m == -1
@@ -80,6 +77,7 @@ def _partial_matching(p, names):
     >>> set(c) == set({'population_size', 'parsimony_coefficient'})
     True
     '''
+
     c = [x for x in names if x.startswith(p)]
     m = len(c)
     if m == 1:
@@ -144,6 +142,7 @@ def lazy(f):
     LookupError: Ambiguous match for parameter name that starts with 'p'.
     Candidate parameter names: ['population_size', 'parsimony_coefficient']
     '''
+
     spec = inspect.getfullargspec(f)
     # if there is **kwargs in function signature, then lazy call is disabled
     if spec.varkw is not None:
