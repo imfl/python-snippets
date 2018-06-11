@@ -111,7 +111,7 @@ def lazy(f):
 
     Doctest
     -------
-    Given a decorator @lazy and a function f so defined:
+    Consider decorating a function f:
 
     @lazy
     def f(x, y, population_size=1000, parsimony_coefficient=0.01):
