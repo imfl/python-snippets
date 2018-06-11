@@ -21,7 +21,7 @@ How to Use
 ----------
 Import and add @lazy decorator above your original function definition, like:
 
-	from lazy import lazy
+    from lazy import lazy
 
     @lazy
     def f(x, y, population_size=1000, parsimony_coefficient=0.01):
