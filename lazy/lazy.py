@@ -19,7 +19,9 @@ then this decorator is for you. It allows lazy function call in this fashion.
 
 How to Use
 ----------
-Put the decorator @lazy above your original function definition, like:
+Import and add @lazy decorator above your original function definition, like:
+
+	from lazy import lazy
 
     @lazy
     def f(x, y, population_size=1000, parsimony_coefficient=0.01):
