@@ -113,14 +113,13 @@ def lazy(f):
     -------
     Consider decorating a function f:
 
-    @lazy
-    def f(x, y, population_size=1000, parsimony_coefficient=0.01):
-        if population_size != 1000:
-            print('customized population size')
-        if parsimony_coefficient != 0.01:
-            print('customized parsimony coefficient')
-        return x + y
-
+    >>> @lazy
+    ... def f(x, y, population_size=1000, parsimony_coefficient=0.01):
+    ...    if population_size != 1000:
+    ...        print('customized population size')
+    ...    if parsimony_coefficient != 0.01:
+    ...        print('customized parsimony coefficient')
+    ...    return x + y
     >>> f(3, 5)
     8
 
@@ -172,15 +171,5 @@ def lazy(f):
 
 
 if __name__ == '__main__':
-
-    # for doctest
-    @lazy
-    def f(x, y, population_size=1000, parsimony_coefficient=0.01):
-        if population_size != 1000:
-            print('customized population size')
-        if parsimony_coefficient != 0.01:
-            print('customized parsimony coefficient')
-        return x + y
-
     import doctest
     doctest.testmod()
