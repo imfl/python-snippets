@@ -1,4 +1,4 @@
-# Python Snippets 代码片段
+# Python Snippets 小代码
 
 ## Lazy Function Call
 
