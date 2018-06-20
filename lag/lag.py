@@ -1,4 +1,8 @@
-# 18/06/20 = Wed
+'''A helper function to generate lagged or future values for a time series.'''
+
+# Date: 18/06/20 = Wed
+
+# Author: Fu Lei <lei dot fu at connect dot ust dot hk>
 
 import pandas as pd
 
