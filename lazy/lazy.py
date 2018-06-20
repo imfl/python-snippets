@@ -1,26 +1,17 @@
 '''
 A decorator that allows partial matching in function parameter names, like in R
-
 Why Use it
 ----------
 Consider a function with long parameter names:
-
     f(x, y, population_size=1000, parsimony_coefficient=0.01)
-
 Typing calls like
-
     f(3, 5, parsimony_coefficient=0.025)
-
 can be tiring. If you want to be lazy, and just type
-
     f(3, 5, pa=0.025)
-
 then this decorator is for you. It allows lazy function call in this fashion.
-
 How to Use
 ----------
 Import and add @lazy decorator above your original function definition, like:
-
     from lazy import lazy
         ...
     @lazy
@@ -42,35 +33,28 @@ __all__ = ['lazy']
 def _partial_matching(p, names):
     '''
     Checks whether a partial name matches any of the complete names
-
     Parameters
     ----------
     p : str
         a partial name
-
     names : iterable of str
         collection of complete names
-
     Returns
     -------
     (m, c) : m for match result, c for complete name(s)
-
     | Case                    |  m | c                        |
     |-------------------------|----|--------------------------|
     | 1. Unambiguous match    |  1 | matched complete name    |
     | 2. No match             |  0 | None                     |
     | 3. Ambiguous match      | -1 | candidate complete names |
-
     Doctest
     -------
     # Unambiguous match
     >>> _partial_matching('pa', {'population_size', 'parsimony_coefficient'})
     (1, 'parsimony_coefficient')
-
     # No match
     >>> _partial_matching('pe', {'population_size', 'parsimony_coefficient'})
     (0, None)
-
     # Ambiguous match
     >>> names = {'population_size', 'parsimony_coefficient'}
     >>> m, c = _partial_matching('p', names)
@@ -94,25 +78,19 @@ def _partial_matching(p, names):
 def lazy(f):
     '''
     A decorator that allows partial matching in function parameter names, like in R
-
     Essentially, it performs the conversion:
-
         f(*a, **partial) ==> f(*a, **complete)
-
     Parameter
     ---------
     f : function
         original function
-
     Returns
     -------
     g : function
         converts f(*a, **partial) ==> f(*a, **complete)
-
     Doctest
     -------
     Consider decorating a function f:
-
     >>> @lazy
     ... def f(x, y, population_size=1000, parsimony_coefficient=0.01):
     ...    if population_size != 1000:
@@ -122,21 +100,17 @@ def lazy(f):
     ...    return x + y
     >>> f(3, 5)
     8
-
     >>> f(3, 5, pa=0.025)
     customized parsimony coefficient
     8
-
     >>> f(3, 5, po=2000)
     customized population size
     8
-
     >>> f(3, 5, pe=42)
     Traceback (most recent call last):
         ...
     LookupError: No match for parameter name that starts with 'pe'.
     Legal parameter name(s): ['x', 'y', 'population_size', 'parsimony_coefficient']
-
     >>> f(3, 5, p=2000)
     Traceback (most recent call last):
         ...
@@ -172,4 +146,4 @@ def lazy(f):
 
 if __name__ == '__main__':
     import doctest
-    doctest.testmod()
+doctest.testmod()
