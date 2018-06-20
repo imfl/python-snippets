@@ -1,4 +1,4 @@
-#### Easy Generation of Lagged and Future Values for Time Series
+# Easy Generation of Lagged and Future Values for Time Series
 
 Suppose you have a `pandas.Series` to reflect China's GDP (US$ trillion) is the past decade:
 
