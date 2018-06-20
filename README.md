@@ -1,9 +1,9 @@
 # Python Snippets 小代码
 
-## List of Source Code 源代码列表
+## Contents 目录
 
-- [Lazy Function Call](lazy/lazy.py)
-- [Easy Generation of Lagged and Future Values for Time Series](lag/lag.py)
+- [Lazy Function Call](#user-content-lazy-function-call)
+- [Easy Generation of Lagged and Future Values for Time Series](#user-content-easy-generation-of-lagged-and-future-values-for-time-series)
 
 ## Lazy Function Call
 
@@ -58,3 +58,8 @@ You want to generate the lag-1, lag-2, and next-1 period of the figures in one g
     2016  11.2      11.1      10.5        NaN
 
 Then you need this helper function. For the source code, click [here](lag/lag.py).
+
+## List of Source Code 源代码列表
+
+- [Lazy Function Call](lazy/lazy.py)
+- [Easy Generation of Lagged and Future Values for Time Series](lag/lag.py)
