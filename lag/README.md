@@ -1,6 +1,6 @@
 #### Easy Generation of Lagged and Future Values for Time Series
 
-Suppose you have a `pandas.Series` to reflect China's GDP is the past decade:
+Suppose you have a `pandas.Series` to reflect China's GDP (US$ trillion) is the past decade:
 
 ```
          gdp
@@ -16,7 +16,7 @@ Suppose you have a `pandas.Series` to reflect China's GDP is the past decade:
 2016    11.2
 ```
 
-You want to generate the lag-1, lag-2, present, and next-1 period of the figures in one go, so that you have a `pandas.DataFrame` which looks like
+You want to generate the lag-1, lag-2, and next-1 period of the figures in one go, so that you have a `pandas.DataFrame` which looks like
 
            gdp  gdp_lag1  gdp_lag2  gdp_next1
     2007   3.6       NaN       NaN        4.6
@@ -30,4 +30,4 @@ You want to generate the lag-1, lag-2, present, and next-1 period of the figures
     2015  11.1      10.5       9.6       11.2
     2016  11.2      11.1      10.5        NaN
 
-Then you need this helper function. Click [here](lag.py).
+Then you need this helper function. For the source code, click [here](lag.py).
