@@ -1,9 +1,9 @@
 # Python Snippets 小代码
 
-## Contents 目录
+## List of Source Code 源代码列表
 
-- [Lazy Function Call](#user-content-lazy-function-call)
-- [Easy Generation of Lagged and Future Values for Time Series](#user-content-easy generation-of-lagged-and-future-values-for-time-series)
+- [Lazy Function Call](lazy/lazy.py)
+- [Easy Generation of Lagged and Future Values for Time Series](lag/lag.py)
 
 ## Lazy Function Call
 
