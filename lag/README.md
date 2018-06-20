@@ -3,7 +3,7 @@
 Suppose you have a `pandas.Series` to reflect China's GDP is the past decade:
 
 ```
-year	gdp
+         gdp
 2007     3.6
 2008     4.6
 2009     5.1
@@ -18,7 +18,7 @@ year	gdp
 
 You want to generate the lag-1, lag-2, present, and next-1 period of the figures in one go, so that you have a `pandas.DataFrame` which looks like
 
-    year   gdp  gdp_lag1  gdp_lag2  gdp_next1
+           gdp  gdp_lag1  gdp_lag2  gdp_next1
     2007   3.6       NaN       NaN        4.6
     2008   4.6       3.6       NaN        5.1
     2009   5.1       4.6       3.6        6.1
