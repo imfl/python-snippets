@@ -63,7 +63,8 @@ def catch(debug=True):
                         j += 1
             if len(poskey) > 0:
                 print(line('Arguments for Positional-or-Keyword Parameters'))
-                j = len(spec.defaults) - len(spec.args)
+                j = 0 if spec.defaults is None else len(spec.defaults)
+                j -= len(spec.args)
                 for x in poskey:
                     print(x, '=', poskey[x], end='')
                     if j >= 0:
@@ -119,7 +120,7 @@ def catch(debug=True):
 
 
 @catch()  # equivalent to @catch(debug=True)
-def foo(a, b=98, *, c, d=100, e, **f):
+def foo(a, b=500, *c, d=50, e, f=5, **g):
     """
     Function to test decorator @catch().
 
@@ -127,33 +128,19 @@ def foo(a, b=98, *, c, d=100, e, **f):
     | ------------------ | --------------------- | ------------------ |
     | a                  | positional-or-keyword | no                 |
     | b                  | positional-or-keyword | yes                |
-    | c                  | keyword-only          | no                 |
+    | c --> ... (if any) | var-positional        | no                 |
     | d                  | keyword-only          | yes                |
     | e                  | keyword-only          | no                 |
-    | f, g, ... (if any) | var-keyword           | no                 |
+    | f                  | keyword-only          | yes                |
+    | g --> ... (if any) | var-keyword           | no                 |
     """
     print('a =', a)
     print('b =', b)
-    print('c =', c)
+    print('c =', c)         # c is a tuple
     print('d =', d)
     print('e =', e)
-    print('f =', f)  # f is a dict for var-keyword parameters
-    print(line('', p='.'))
-
-
-@catch()  # equivalent to @catch(debug=True)
-def bar(a=97, *b):
-    """
-    Function to test decorator @catch().
-
-    | parameter name     | type                  | with default value |
-    | ------------------ | --------------------- | ------------------ |
-    | a                  | positional-or-keyword | yes                |
-    | b                  | var-positoinal        | no                 |
-    """
-    print('a =', a)
-    print('b =', b)
-    print(line('', p='.'))
+    print('f =', f)
+    print('g =', g)         # g is a dict
 
 
 def line(s='', p='-', length=75, lead=5, newline=True):
@@ -165,7 +152,5 @@ def line(s='', p='-', length=75, lead=5, newline=True):
 
 # tests
 if __name__ == '__main__':
-    foo(0, 1, c=2, d=3, e=4, f=5, g=6)
-    foo(0, c=2, e=4)
-    bar(3, 6, 66, 666, 6666, 66666, 666666)
-    bar()
+    foo(0, 1, 2, 22, 222, 2222, d=3, e=4, g=6, h=7, i=8, j=9, k=10)
+    foo(a='a', e=2.71828)
