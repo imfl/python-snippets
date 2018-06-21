@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 A decorator that catches parameter names, parameter categories, and values of
-the arguments passed to any function.
+the arguments passed to a function.
 """
 
 # Date: 18/06/21 = Thu
@@ -17,7 +17,8 @@ __all__ = ['catch']
 
 def catch(debug=True):
     """
-    A decorator that catches arguments passed to any function.
+    A decorator that catches parameter names, parameter categories, and values
+    of the arguments passed to a function.
 
     How to Use
     ----------
