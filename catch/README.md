@@ -16,12 +16,12 @@ You want a clean-cut print-out like:
 ----- Arguments for Positional-or-Keyword Parameters ----------------------
 
 a = 0
-b = 1
+b = 1  (default = 98)
 
 ----- Arguments for Keyword-Only Parameters -------------------------------
 
 c = 2
-d = 3
+d = 3  (default = 100)
 e = 4
 
 ----- Arguments for Var-Keyword Parameters --------------------------------
@@ -30,7 +30,7 @@ f = 5
 g = 6
 ```
 
-As another case, consider another function with signature `bar(a=97, *b)`.
+As another case, consider a function with signature `bar(a=97, *b)`. 
 
 Let's say you call with `bar(3, 6, 66, 666, 6666, 66666, 666666)`.
 
@@ -39,12 +39,14 @@ You want a clean-cut print-out like:
 ```
 ----- Arguments for Positional-or-Keyword Parameters ----------------------
 
-a = 3
+a = 3  (default = 97)
 
 ----- Arguments for Var-Positional Parameters -----------------------------
 
 (6, 66, 666, 6666, 66666, 666666)
 ```
 
-Then you need this decorator. For the source code, click [here](catch.py).
+Then you need this decorator.
+
+For the source code, click [here](catch.py).
 

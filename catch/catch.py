@@ -63,8 +63,14 @@ def catch(debug=True):
                         j += 1
             if len(poskey) > 0:
                 print(line('Arguments for Positional-or-Keyword Parameters'))
+                j = len(spec.defaults) - len(spec.args)
                 for x in poskey:
-                    print(x, '=', poskey[x])
+                    print(x, '=', poskey[x], end='')
+                    if j >= 0:
+                        print('  (default = ', spec.defaults[j], ')', sep='')
+                    else:
+                        print('')
+                    j += 1
 
             # build dict for arguments for keyword-only parameters
             keyonly = {}
@@ -77,7 +83,12 @@ def catch(debug=True):
             if len(keyonly) > 0:
                 print(line('Arguments for Keyword-Only Parameters'))
                 for x in keyonly:
-                    print(x, '=', keyonly[x])
+                    print(x, '=', keyonly[x], end='')
+                    if x in spec.kwonlydefaults:
+                        print('  (default = ', spec.kwonlydefaults[x], ')',
+                              sep='')
+                    else:
+                        print('')
 
             # build tuple for arguments for var-positional parameters
             varpos = local['args'][i:]
