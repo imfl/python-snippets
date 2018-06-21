@@ -8,7 +8,7 @@ Suppose you have a function with signature `foo(a, b=500, *c, d=50, e, f=5, **g)
 
 Let's say you call it with `foo(0, 1, 2, 22, 222, 2222, d=3, e=4, g=6, h=7, i=8, j=9, k=10)`.
 
-If you want a clear print-out to show what values are passed to which parameters, like:
+If you want a clear print-out to show you what values are passed to which parameters, like:
 
 ```
 ----- Arguments for Positional-or-Keyword Parameters ----------------------
