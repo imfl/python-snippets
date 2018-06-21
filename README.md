@@ -1,10 +1,10 @@
-# Python Snippets 小代码
+# Python Snippets 代码小段
 
 ## Contents 目录
 
 - [Lazy Function Call](#user-content-lazy-function-call)
 - [Easy Generation of Lagged and Future Values for Time Series](#user-content-easy-generation-of-lagged-and-future-values-for-time-series)
-- [Catching Names, Values, and Categories of Arguments](#user-content-catching-names-values-and-categories-of-arguments)
+- [Catching Arguments](#user-content-catching-arguments)
 
 ## Lazy Function Call
 
@@ -60,7 +60,11 @@ You want to generate the lag-1, lag-2, and next-1 period of the figures in one g
 
 Then you need this helper function. For the source code, click [here](lag/lag.py).
 
-## Catching Names, Values, and Categories of Arguments
+## Catching Arguments
+
+**A decorator that catches parameter names, parameter categories, and values of the arguments passed to a function.** 
+
+**装饰器：对于给定函数，捕捉调用时传入的实参，输出对应的形参名称、形参类别，以及实参的值。**
 
 Suppose you have a function with signature `foo(a, b=98, *, c, d=100, e, **f)`.
 
@@ -110,4 +114,4 @@ Then you need this decorator. For the source code, click [here](catch/catch.py).
 
 - [Lazy Function Call](lazy/lazy.py)
 - [Easy Generation of Lagged and Future Values for Time Series](lag/lag.py)
-- [Catching Names, Values, and Categories of Arguments](catch/catch.py)
+- [Catching Arguments](catch/catch.py)
