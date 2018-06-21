@@ -31,8 +31,8 @@ def catch(debug=True):
     Prints out the parameter names, parameter categories, and values of the
     arguments passed to a function. The arguments fall into 4 categories:
         1. arguments for positional-or-keyword parameters
-        2. arguments for keyword-only parameters
-        3. arguments for var-positional parameters
+        2. arguments for var-positional parameters
+        3. arguments for keyword-only parameters
         4. arguments for var-keyword parameters
 
     References
