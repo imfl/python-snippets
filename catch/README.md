@@ -2,8 +2,6 @@
 
 **A decorator that catches parameter names, parameter categories, and values of the arguments passed to any function.** 
 
----
-
 Suppose you have a function with signature `foo(a, b=98, *, c, d=100, e, **f)`.
 
 In calling it, you want to know what values are passed to which parameters. The situation may become complex when *var-positional* parameters (`*`)  and *var-keyword* parameters (`**`) are involved. 
