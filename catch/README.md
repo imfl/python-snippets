@@ -6,11 +6,9 @@
 
 Suppose you have a function with signature `foo(a, b=98, *, c, d=100, e, **f)`.
 
-In calling it, you want to know what values are passed to which parameters. The situation may become complex when *var-positional* parameters (`*`)  and *var-keyword* parameters (`**`) are involved. 
+Let's say you call it with `foo(0, 1, c=2, d=3, e=4, f=5, g=6)`.
 
-Let's say you call with `foo(0, 1, c=2, d=3, e=4, f=5, g=6)`.
-
-You want a clean-cut print-out like:
+You want to know what values are passed to which parameters, like:
 
 ```
 ----- Arguments for Positional-or-Keyword Parameters ----------------------
@@ -33,11 +31,11 @@ f -->
 }
 ```
 
-As another case, consider a function with signature `bar(a=97, *b)`. 
+Consider another case, a function with signature `bar(a=97, *b)`. 
 
-Let's say you call with `bar(3, 6, 66, 666, 6666, 66666, 666666)`.
+Now you call it with `bar(3, 6, 66, 666, 6666, 66666, 666666)`.
 
-You want a clean-cut print-out like:
+If you want a clean-cut print-out like:
 
 ```
 ----- Arguments for Positional-or-Keyword Parameters ----------------------
@@ -49,7 +47,7 @@ a = 3  (default = 97)
 b --> (6, 66, 666, 6666, 66666, 666666)
 ```
 
-Then you need this decorator.
+then you may need this decorator.
 
-For the source code, click [here](catch.py).
+Get [source code](catch.py).
 
