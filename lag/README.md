@@ -1,5 +1,7 @@
 # Easy Generation of Lagged and Future Values for Time Series
 
+**A helper function to generate lagged or future values for a time series.** 
+
 Suppose you have a `pandas.Series` to reflect China's GDP (US$ trillion) is the past decade:
 
 ```

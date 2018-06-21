@@ -1,6 +1,6 @@
 # Lazy Function Call
 
-A decorator that allows partial matching in function parameter names, like in R.
+**A decorator that allows partial matching in function parameter names, like in R.**
 
 Consider a function with long parameter names:
 
