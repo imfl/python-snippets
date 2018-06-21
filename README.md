@@ -27,5 +27,5 @@ A decorator that catches parameter names, parameter categories, and values of th
 ## List of Source Code 源代码列表
 
 - [Lazy Function Call](lazy/lazy.py)
-- [Easy Generation of Lagged and Future Values for Time Series](lag/lag.py)
+- [Generate Lagged Values](lag/lag.py)
 - [Catching Arguments](catch/catch.py)
