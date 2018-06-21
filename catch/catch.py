@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""A decorator that catches arguments passed to any function."""
+"""
+A decorator that catches parameter names, parameter categories, and values of
+the arguments passed to any function.
+"""
 
 # Date: 18/06/21 = Thu
 
@@ -13,7 +16,7 @@ __all__ = ['catch']
 
 
 def catch(debug=True):
-    '''
+    """
     A decorator that catches arguments passed to any function.
 
     How to Use
@@ -34,7 +37,7 @@ def catch(debug=True):
     References
     ----------
     https://docs.python.org/3/glossary.html#term-parameter
-    '''
+    """
     def do(f):
         @functools.wraps(f)
         def g(*args, **kwargs):
@@ -103,7 +106,7 @@ def catch(debug=True):
 
 @catch()  # equivalent to @catch(debug=True)
 def foo(a, b=98, *, c, d=100, e, **f):
-    '''
+    """
     Function to test decorator @catch().
 
     | parameter name     | type                  | with default value |
@@ -114,7 +117,7 @@ def foo(a, b=98, *, c, d=100, e, **f):
     | d                  | keyword-only          | yes                |
     | e                  | keyword-only          | no                 |
     | f, g, ... (if any) | var-keyword           | no                 |
-    '''
+    """
     print('a = ', a)
     print('b = ', b)
     print('c = ', c)
@@ -126,14 +129,14 @@ def foo(a, b=98, *, c, d=100, e, **f):
 
 @catch()  # equivalent to @catch(debug=True)
 def bar(a=97, *b):
-    '''
+    """
     Function to test decorator @catch().
 
     | parameter name     | type                  | with default value |
     | ------------------ | --------------------- | ------------------ |
     | a                  | positional-or-keyword | yes                |
     | b                  | var-positoinal        | no                 |
-    '''
+    """
     print('a = ', a)
     print('b = ', b)
     print(line('', p='.'))
