@@ -94,14 +94,16 @@ def catch(debug=True):
             varpos = local['args'][i:]
             if len(varpos) > 0:
                 print(line('Arguments for Var-Positional Parameters'))
-                print(varpos)
+                print(spec.varargs, '-->', varpos)
 
             # build dict for arguments for var-keyword parameters
             varkey = local['kwargs']
             if len(varkey) > 0:
                 print(line('Arguments for Var-Keyword Parameters'))
+                print(spec.varkw, '-->\n{')
                 for x in varkey:
-                    print(x, '=', varkey[x])
+                    print('   ', x, '=', varkey[x])
+                print('}')
 
             print(line('Finish Catching Arguments Passed to Function %s()'
                        % f.__name__, p=':'))
@@ -130,12 +132,12 @@ def foo(a, b=98, *, c, d=100, e, **f):
     | e                  | keyword-only          | no                 |
     | f, g, ... (if any) | var-keyword           | no                 |
     """
-    print('a = ', a)
-    print('b = ', b)
-    print('c = ', c)
-    print('d = ', d)
-    print('e = ', e)
-    print('f = ', f)  # f is a dict for var-keyword parameters
+    print('a =', a)
+    print('b =', b)
+    print('c =', c)
+    print('d =', d)
+    print('e =', e)
+    print('f =', f)  # f is a dict for var-keyword parameters
     print(line('', p='.'))
 
 
@@ -149,8 +151,8 @@ def bar(a=97, *b):
     | a                  | positional-or-keyword | yes                |
     | b                  | var-positoinal        | no                 |
     """
-    print('a = ', a)
-    print('b = ', b)
+    print('a =', a)
+    print('b =', b)
     print(line('', p='.'))
 
 

@@ -26,8 +26,11 @@ e = 4
 
 ----- Arguments for Var-Keyword Parameters --------------------------------
 
-f = 5
-g = 6
+f -->
+{
+    f = 5
+    g = 6
+}
 ```
 
 As another case, consider a function with signature `bar(a=97, *b)`. 
@@ -43,7 +46,7 @@ a = 3  (default = 97)
 
 ----- Arguments for Var-Positional Parameters -----------------------------
 
-(6, 66, 666, 6666, 66666, 666666)
+b --> (6, 66, 666, 6666, 66666, 666666)
 ```
 
 Then you need this decorator.
