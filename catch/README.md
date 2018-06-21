@@ -1,6 +1,6 @@
 # Catching Arguments
 
-> **A decorator that catches parameter names, parameter categories, and values of the arguments passed to any function.** 
+**A decorator that catches parameter names, parameter categories, and values of the arguments passed to any function.** 
 
 Suppose you have a function with signature `foo(a, b=98, *, c, d=100, e, **f)`.
 
