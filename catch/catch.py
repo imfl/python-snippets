@@ -22,14 +22,14 @@ def catch(debug=True):
 
     How to Use
     ----------
-    Put the decorator @catch(), or @catch(debug=True), above function
-    definition. To turn off catching, set @catch(debug=False), so that the
-    decorator does nothing.
+    Put the @catch(), or @catch(debug=True), above the defitnition of the
+    function to decorate. To turn off catching, set @catch(debug=False), so
+    that the decorator does nothing.
 
     What Does it Do
     ---------------
-    Prints out the names, categories and values of the arguments. The arguments
-    fall into 4 categories:
+    Prints out the parameter names, parameter categories, and values of the
+    arguments passed to a function. The arguments fall into 4 categories:
         1. arguments for positional-or-keyword parameters
         2. arguments for keyword-only parameters
         3. arguments for var-positional parameters
