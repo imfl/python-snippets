@@ -16,7 +16,7 @@ A decorator that allows partial matching in function parameter names, like in R.
 
 A helper function to generate many lagged or future values for a time series in one go. 
 
-辅助函数：轻松生成时间序列的多阶滞后序列或未来序列。
+辅助函数：给定时间序列，一次性生成多阶滞后序列或未来序列，并且放置于同一矩阵（数据框）。
 
 ## [Catching Arguments](catch)
 

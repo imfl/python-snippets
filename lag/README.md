@@ -1,6 +1,8 @@
-# Easy Generation of Lagged and Future Values for Time Series
+# Generate Lagged Values
 
-**A helper function to generate lagged or future values for a time series.** 
+**A helper function to generate many lagged or future values for a time series in one go.** 
+
+**辅助函数：给定时间序列，一次性生成多阶滞后序列或未来序列，并且放置于同一矩阵（数据框）。**
 
 Suppose you have a `pandas.Series` to reflect China's GDP (US$ trillion) is the past decade:
 
