@@ -73,6 +73,12 @@ def catch(debug=True):
                         print('')
                     j += 1
 
+            # build tuple for arguments for var-positional parameters
+            varpos = local['args'][i:]
+            if len(varpos) > 0:
+                print(line('Arguments for Var-Positional Parameters'))
+                print(spec.varargs, '-->', varpos)
+
             # build dict for arguments for keyword-only parameters
             keyonly = {}
             for x in spec.kwonlyargs:
@@ -90,12 +96,6 @@ def catch(debug=True):
                               sep='')
                     else:
                         print('')
-
-            # build tuple for arguments for var-positional parameters
-            varpos = local['args'][i:]
-            if len(varpos) > 0:
-                print(line('Arguments for Var-Positional Parameters'))
-                print(spec.varargs, '-->', varpos)
 
             # build dict for arguments for var-keyword parameters
             varkey = local['kwargs']

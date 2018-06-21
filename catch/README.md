@@ -16,15 +16,15 @@ If you want a clear print-out to show you what values are passed to which parame
 a = 0
 b = 1  (default = 500)
 
+----- Arguments for Var-Positional Parameters -----------------------------
+
+c --> (2, 22, 222, 2222)
+
 ----- Arguments for Keyword-Only Parameters -------------------------------
 
 d = 3  (default = 50)
 e = 4
 f = 5  (default = 5)
-
------ Arguments for Var-Positional Parameters -----------------------------
-
-c --> (2, 22, 222, 2222)
 
 ----- Arguments for Var-Keyword Parameters --------------------------------
 
