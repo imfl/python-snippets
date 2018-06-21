@@ -4,7 +4,7 @@
 
 - [Lazy Function Call](#user-content-lazy-function-call)
 - [Easy Generation of Lagged and Future Values for Time Series](#user-content-easy-generation-of-lagged-and-future-values-for-time-series)
-- [Catching Names, Values, and Categories of Arguments](#user-content-catching-names,-values,-and-categories-of-arguments)
+- [Catching Names, Values, and Categories of Arguments](#user-content-catching-names-values-and-categories-of-arguments)
 
 ## Lazy Function Call
 
