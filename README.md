@@ -8,19 +8,19 @@
 
 ## [Lazy Function Call](lazy)
 
-**A decorator that allows partial matching in function parameter names, like in R.**
+A decorator that allows partial matching in function parameter names, like in R.
 
 装饰器：像R语言一样，允许在调用函数时，对形参名称做部分匹配，不用写全形参的名称。
 
 ## [Generate Lagged Values](lag)
 
-**A helper function to generate lagged or future values for a time series.** 
+A helper function to generate many lagged or future values for a time series in one go. 
 
-辅助函数：轻松生成时间序列的滞后序列和未来序列。
+辅助函数：轻松生成时间序列的多阶滞后序列或未来序列。
 
 ## [Catching Arguments](catch)
 
-**A decorator that catches parameter names, parameter categories, and values of the arguments passed to a function.** 
+A decorator that catches parameter names, parameter categories, and values of the arguments passed to a function. 
 
 装饰器：对于给定函数，捕捉调用时传入的实参，输出对应的形参名称、形参类别，以及实参的值。
 
