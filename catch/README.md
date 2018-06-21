@@ -1,6 +1,8 @@
 # Catching Arguments
 
-**A decorator that catches parameter names, parameter categories, and values of the arguments passed to any function.** 
+**A decorator that catches parameter names, parameter categories, and values of the arguments passed to a function.** 
+
+**装饰器：对于给定函数，捕捉调用时传入的实参，输出对应的形参名称、形参类别，以及实参的值。**
 
 Suppose you have a function with signature `foo(a, b=98, *, c, d=100, e, **f)`.
 
