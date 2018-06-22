@@ -74,10 +74,12 @@ last_line = 0
 
 def make_tob(filename='README.md', title=True, update=True):
     headers = []
+    lists = []
+    empty = []
     top_level = 7
-    locating_tob = update
 
-    with codes.open(filename, mode='r', encoding='utf8') as f:
+    with codecs.open(filename, mode='r', encoding='utf8') as f:
+        begin = end = 0
         for i, line in enumerate(f):
             line = line.lstrip()
             if len(line) > 0:
@@ -85,11 +87,36 @@ def make_tob(filename='README.md', title=True, update=True):
                     result = parse_header(line)
                     if result[0] > 0:
                         headers.append((i+1, result[0], result[1]))
-                        if result[0] < top_level:
+                        if (result[0] < top_level) and \
+                           (not (title and len(headers) == 1)):
                             top_level = result[0]
-                elif locating_tob and (line[0] == '-' or line[0] == '*'):
+                elif line[0] == '-' or line[0] == '*':
+                    if is_list(line):
+                        lists.append(i+1)
+            else:
+                empty.append(i+1)
 
+    tob = ''
+    last_indent = 0
+    this_indent = 0
+    if title and len(headers) > 0:
+        headers = headers[1:]
+    for h in headers:
+        this_indent = min(h[1] - top_level, last_indent + 1)
+        anchor = '.'.join(h[2].lower().split())
+        tob += '    ' * this_indent + '- [' + h[2] + ']' + '(' + anchor + ')'
+        last_indent = this_indent
 
+    # write tob
+
+    i = 1
+    for line in fileinput.input(filename, inplace=1):
+        if (not update) or i < begin or i > end:
+            print(line.rstrip())
+        if i == tob_line:
+            print()
+            print(text.rstrip())
+        i += 1
 
 
 with codecs.open(filename, mode='r', encoding='utf8') as f:
