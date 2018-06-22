@@ -35,7 +35,7 @@ import codecs
 import fileinput
 
 
-def parse(line):
+def parse_header(line):
     def level(x):
         try:
             return {
@@ -56,6 +56,11 @@ def parse(line):
         return 0, None
 
 
+def is_list(line):
+    first = line.split(maxsplit=1)
+    return len(first) > 0 and (first[0] == '-' or first[0] == '*')
+
+
 filename = 'rm.md'
 contents = []
 top_level = 7
@@ -65,6 +70,27 @@ tob_section = []
 tob_line = 0
 tob_state = 0
 last_line = 0
+
+
+def make_tob(filename='README.md', title=True, update=True):
+    headers = []
+    top_level = 7
+    locating_tob = update
+
+    with codes.open(filename, mode='r', encoding='utf8') as f:
+        for i, line in enumerate(f):
+            line = line.lstrip()
+            if len(line) > 0:
+                if line[0] == '#':
+                    result = parse_header(line)
+                    if result[0] > 0:
+                        headers.append((i+1, result[0], result[1]))
+                        if result[0] < top_level:
+                            top_level = result[0]
+                elif locating_tob and (line[0] == '-' or line[0] == '*'):
+
+
+
 
 with codecs.open(filename, mode='r', encoding='utf8') as f:
     skip_title = True
