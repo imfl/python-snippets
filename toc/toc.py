@@ -11,6 +11,8 @@ import fileinput
 import os.path
 import shutil
 
+from catch import catch
+
 
 __all__ = ['auto_toc']
 
@@ -50,6 +52,7 @@ def parse_list(line):
     return len(first) > 0 and (first[0] == '-' or first[0] == '*')
 
 
+@catch()
 def auto_toc(filename, has_title, has_toc_header, toc_header, override):
 
     name, ext = os.path.splitext(filename)
@@ -109,9 +112,10 @@ def auto_toc(filename, has_title, has_toc_header, toc_header, override):
     # decide where to remove, in order to override old toc
     to_remove = [x for x in lists
                  if x > toc_line and (len(headers) == 0 or x < headers[0][0])]
+
     # plan to remove the entire old toc area and all the following empty lines
     if toc_header is not None:
-        to_remove = list(toc_line) + to_remove
+        to_remove = [toc_line] + to_remove
     if len(to_remove) > 0:
         to_remove = list(range(to_remove[0], to_remove[-1] + 1))
         while to_remove[-1] + 1 in empty:
@@ -137,9 +141,9 @@ def auto_toc(filename, has_title, has_toc_header, toc_header, override):
         if toc_line == 0 and i == 1:
             if toc_header is not None:
                 print(toc_header)
-            print(toc.rstrip())
+            print(toc)
         # remove old toc
-        if override and i in to_remove:
+        if override and (i in to_remove):
             pass
         else:
             print(line.rstrip())
@@ -159,19 +163,25 @@ if __name__ == '__main__':
     filename = input('Enter filename '
                      '(press ENTER for \'README.md\') : ')
     has_title = input('Has header for title '
-                      '(press ENTER for YES, enter 0 for no) ? ')
+                      '(press ENTER for YES, enter any key for no) ? ')
     has_toc_header = input('Has header for table of contents '
-                           '(press ENTER for YES, enter 0 for no) ? ')
+                           '(press ENTER for YES, enter any key for no) ? ')
     toc_header = input('Enter new TOC header '
                        '(press ENTER if none or no change) : ')
     override = input('Override any existing TOC '
-                     '(press ENTER for YES, enter 0 for no) ? ')
+                     '(press ENTER for YES, enter any key for no) ? ')
 
     params = [filename, has_title, has_toc_header, toc_header, override]
     default = ['README.md', True, True, None, True]
+    otherwise = []
 
     for i in range(len(params)):
         if len(params[i]) == 0:
+            print('set to default (%d) : ' % i, default[i])
             params[i] = default[i]
+
+    params[1] = bool(params[1])
+    params[2] = bool(params[2])
+    params[4] = bool(params[4])
 
     auto_toc(*params)
