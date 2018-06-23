@@ -1,30 +1,5 @@
-############# UNFINISHED
-
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jun 22 13:44:49 2018
-
-@author: FL
-
-
-title : skip first header and add toc here
-
-update : if True, remove old toc
-
-what is toc? with * or -
-
-Parameters
-----------
-
-If TITLE, skip the first header and insert toc right below it.
-If no TITLE, insert toc right at the beginning of the file.
-
-If UPDATE, check for existing toc and overwrites it, keeping original headlines.
-If no UPDATE, do not check.
-
-What is considered a toc?
-If there is any - or * leading in the first or second sections
-
 References
 ----------
 https://guides.github.com/features/mastering-markdown/
@@ -33,9 +8,19 @@ https://guides.github.com/features/mastering-markdown/
 
 import codecs
 import fileinput
+import os.path
+import shutil
+
+
+__all__ = ['auto_toc']
 
 
 def parse_header(line):
+    '''
+    Parse a line to tell if it is a markdown header. Return a tuple of two:
+    (level of header, contents of header). If not a header, returns (0, None).
+    '''
+
     def level(x):
         try:
             return {
@@ -50,135 +35,143 @@ def parse_header(line):
             return 0
 
     splitted = line.split(maxsplit=1)
-    if len(splitted) > 1:    # a line like '##' does not count as a header
+    # a line that consists of only '#', like '###', does not count as a header
+    if len(splitted) > 1:
         return level(splitted[0]), splitted[1:][0]
     else:
         return 0, None
 
 
-def is_list(line):
+def parse_list(line):
+    '''
+    Parse a line to tell if it is a markdown list. Return True or False.
+    '''
     first = line.split(maxsplit=1)
     return len(first) > 0 and (first[0] == '-' or first[0] == '*')
 
 
-filename = 'rm.md'
-contents = []
-top_level = 7
-title_line = 0
-text = ''
-toc_section = []
-toc_line = 0
-toc_state = 0
-last_line = 0
+def auto_toc(filename, has_title, has_toc_header, toc_header, override):
 
+    name, ext = os.path.splitext(filename)
+    print('\nReading %s ...' % filename)
+    if ext.lower() not in {'.markdown', '.mdown', '.mkdn', '.mkd', '.md'}:
+        raise IOError('Expect a markdown file, but file extension is %s.'
+                      % ext)
+    copyname = name + '.bak'
+    print('\nSaving a back-up copy to %s ...' % copyname)
+    shutil.copyfile(filename, copyname)
 
-def make_toc(filename='README.md', title=True, update=True):
-    headers = []
-    lists = []
-    empty = []
-    top_level = 7
+    headers = []   # list of tuple of 3: [(line number, level, contents), ...]
+    lists = []     # list of line numbers of markdown lists
+    empty = []     # list of line number of empty lines
+    top_level = 7  # top level among all headers, not counting title, toc
 
+    # scan a markdown file for headers, lists, and empty lines
+    print('\nScanning file for headers ...')
     with codecs.open(filename, mode='r', encoding='utf8') as f:
-        begin = end = 0
         for i, line in enumerate(f):
             line = line.lstrip()
             if len(line) > 0:
                 if line[0] == '#':
                     result = parse_header(line)
-                    if result[0] > 0:
-                        headers.append((i+1, result[0], result[1]))
-                        if (result[0] < top_level) and \
-                           (not (title and len(headers) == 1)):
-                            top_level = result[0]
+                    if result[0]:
+                        headers.append((i + 1, result[0], result[1]))
                 elif line[0] == '-' or line[0] == '*':
-                    if is_list(line):
-                        lists.append(i+1)
+                    if parse_list(line):
+                        lists.append(i + 1)
             else:
-                empty.append(i+1)
+                empty.append(i + 1)
 
-    toc = ''
-    last_indent = 0
-    this_indent = 0
-    if title and len(headers) > 0:
+    # get line number of title, if any
+    title_line = 0
+    if has_title and len(headers) > 0:
+        print('\nReading title: %s ...' % headers[0][2][:10].rstrip())
+        title_line = headers[0][0]
         headers = headers[1:]
+
+    # get line number of header for toc, if any
+    toc_line = title_line
+    if has_toc_header and len(headers) > 0:
+        print('\nReading TOC header: %s ...' % headers[0][2][:10].rstrip())
+        toc_line = headers[0][0]
+        headers = headers[1:]
+
+    # get top level among all headers, if any (top level is smallest level)
+    top_level = 1
+    if len(headers) > 0:
+        top_level = min(x[1] for x in headers)
+
+    # prepare new toc header
+    if toc_header is not None:
+        print('\nPreparing new TOC header: %s ...' % toc_header)
+        toc_header = '#' * top_level + ' ' + toc_header
+
+    # decide where to remove, in order to override old toc
+    to_remove = [x for x in lists
+                 if x > toc_line and (len(headers) == 0 or x < headers[0][0])]
+    # plan to remove the entire old toc area and all the following empty lines
+    if toc_header is not None:
+        to_remove = list(toc_line) + to_remove
+    if len(to_remove) > 0:
+        to_remove = list(range(to_remove[0], to_remove[-1] + 1))
+        while to_remove[-1] + 1 in empty:
+            to_remove.append(to_remove[-1] + 1)
+        print('\nDetected an existing TOC, from line %d to line %d ...' %
+              (to_remove[0], to_remove[-1]))
+
+    # prepare new toc
+    toc = ''
+    indent = last_indent = 0
     for h in headers:
-        this_indent = min(h[1] - top_level, last_indent + 1)
-        anchor = '.'.join(h[2].lower().split())
-        toc += '    ' * this_indent + '- [' + h[2] + ']' + '(' + anchor + ')'
-        last_indent = this_indent
+        # try best to reflect toc structure while following markdown rules
+        indent = min(h[1] - top_level, last_indent + 1)
+        anchor = '#user-content-' + '-'.join(h[2].lower().split())
+        toc += '\n%s- [%s](%s)\n' % ('    ' * indent, h[2].rstrip(), anchor)
+        last_indent = indent
 
-    # write toc
-
+    # write file
+    print('\nMaking / Updating TOC for %d headers ...' % len(headers))
     i = 1
     for line in fileinput.input(filename, inplace=1):
-        if (not update) or i < begin or i > end:
+        # insert at the beginning, if applicable
+        if toc_line == 0 and i == 1:
+            if toc_header is not None:
+                print(toc_header)
+            print(toc.rstrip())
+        # remove old toc
+        if override and i in to_remove:
+            pass
+        else:
             print(line.rstrip())
+        # insert after toc line, if applicable
         if i == toc_line:
-            print()
-            print(text.rstrip())
+            if toc_header is not None:
+                print(toc_header)
+            print(toc.rstrip())
         i += 1
 
-
-with codecs.open(filename, mode='r', encoding='utf8') as f:
-    skip_title = True
-    for i, line in enumerate(f):
-        line = line.lstrip()
-        if len(line) > 0:
-            if line[0] == '#':
-                if skip_title:
-                    skip_title = False
-                    last_line = title_line = i + 1
-                    print('ll = ', last_line)
-
-                    continue
-
-                result = parse(line)
-                if result[0] > 0:
-                    last_line = i + 1
-#                    print('last_line = ', last_line)
-                    contents.append((result[0], result[1]))
-                    if toc_state == 1:
-                        toc_state = 2
-                    if result[0] < top_level:
-                        top_level = result[0]
-#                    print(i + 1, '[', result[0], ']', result[1], '(', toc_state, ')')
-            elif len(contents) < 2 and toc_state < 2:
-                first = line.split(maxsplit=1)[0]
-                if first == '-' or first == '*':
-                    toc_line = last_line
-                    if len(toc_section) > 1:
-                        toc_section.pop()
-                    toc_section.append(i + 1)
-                    toc_state = 1
+    print('\nFinish ...')
 
 
-    last_indent = 0
-    this_indent = 0
-    last_level = contents[0][0]
-    for h in contents:
-        this_indent = min((h[0] - top_level), last_indent + 1)
-        text += '    ' * this_indent
-        text += '- '
-        text += h[1]
-        last_indent = this_indent
+if __name__ == '__main__':
 
-# if title, toc_line = title_line
+    print('----- Make/Update Table of Contents (TOC) for Markdown Files -----')
+    filename = input('Enter filename '
+                     '(press ENTER for \'README.md\') : ')
+    has_title = input('Has header for title '
+                      '(press ENTER for YES, enter 0 for no) ? ')
+    has_toc_header = input('Has header for table of contents '
+                           '(press ENTER for YES, enter 0 for no) ? ')
+    toc_header = input('Enter new TOC header '
+                       '(press ENTER if none or no change) : ')
+    override = input('Override any existing TOC '
+                     '(press ENTER for YES, enter 0 for no) ? ')
 
-if toc_line == 0:
-    toc_line = title_line
+    params = [filename, has_title, has_toc_header, toc_header, override]
+    default = ['README.md', True, True, None, True]
 
-print('tocline = ', toc_line)
+    for i in range(len(params)):
+        if len(params[i]) == 0:
+            params[i] = default[i]
 
-i = 1
-for line in fileinput.input(filename, inplace=1):
-    if len(toc_section) == 0 or i < toc_section[0] or i > toc_section[1]:
-        print(line, end='')
-    if i == toc_line:
-        print()
-        print(text.rstrip())
-    i += 1
-
-
-
-#print(contents)
-
+    auto_toc(*params)
