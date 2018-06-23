@@ -15,16 +15,14 @@ import inspect
 __all__ = ['catch']
 
 
-def catch(debug=True):
+def catch(f):
     """
     A decorator that catches parameter names, parameter categories, and values
     of the arguments passed to a function.
 
     How to Use
     ----------
-    Put the @catch(), or @catch(debug=True), above the defitnition of the
-    function to decorate. To turn off catching, set @catch(debug=False), so
-    that the decorator does nothing.
+    Put the @catch above the defitnition of the function to decorate.
 
     What Does it Do
     ---------------
@@ -39,90 +37,82 @@ def catch(debug=True):
     ----------
     https://docs.python.org/3/glossary.html#term-parameter
     """
-    def do(f):
-        @functools.wraps(f)
-        def g(*args, **kwargs):
-            local = copy.deepcopy(locals())
-            spec = inspect.getfullargspec(f)
-            print(line('Start Catching Arguments Passed to Function %s()'
-                       % f.__name__, p=':'))
+    @functools.wraps(f)
+    def g(*args, **kwargs):
+        local = copy.deepcopy(locals())
+        spec = inspect.getfullargspec(f)
+        print(line('Start Catching Arguments Passed to Function %s()'
+                   % f.__name__, p=':'))
 
-            # build dict for arguments for positional-or-keyword parameters
-            poskey = {}
-            i = j = 0
-            for x in spec.args:
+        # build dict for arguments for positional-or-keyword parameters
+        poskey = {}
+        i = j = 0
+        for x in spec.args:
+            try:
+                poskey[x] = local['args'][i]
+                i += 1
+            except IndexError:
                 try:
-                    poskey[x] = local['args'][i]
-                    i += 1
-                except IndexError:
-                    try:
-                        poskey[x] = local['kwargs'][x]
-                        del local['kwargs'][x]
-                    except KeyError:
-                        poskey[x] = spec.defaults[j]
-                        j += 1
-            if len(poskey) > 0:
-                print(line('Arguments for Positional-or-Keyword Parameters'))
-                j = 0 if spec.defaults is None else len(spec.defaults)
-                j -= len(spec.args)
-                for x in poskey:
-                    print(x, '=', poskey[x], end='')
-                    if j >= 0:
-                        print('  (default = ', spec.defaults[j], ')', sep='')
-                    else:
-                        print('')
-                    j += 1
-
-            # build tuple for arguments for var-positional parameters
-            varpos = local['args'][i:]
-            if len(varpos) > 0:
-                print(line('Arguments for Var-Positional Parameters'))
-                print(spec.varargs, '-->', varpos)
-
-            # build dict for arguments for keyword-only parameters
-            keyonly = {}
-            for x in spec.kwonlyargs:
-                try:
-                    keyonly[x] = local['kwargs'][x]
+                    poskey[x] = local['kwargs'][x]
                     del local['kwargs'][x]
                 except KeyError:
-                    keyonly[x] = spec.kwonlydefaults[x]
-            if len(keyonly) > 0:
-                print(line('Arguments for Keyword-Only Parameters'))
-                for x in keyonly:
-                    print(x, '=', keyonly[x], end='')
-                    if x in spec.kwonlydefaults:
-                        print('  (default = ', spec.kwonlydefaults[x], ')',
-                              sep='')
-                    else:
-                        print('')
+                    poskey[x] = spec.defaults[j]
+                    j += 1
+        if len(poskey) > 0:
+            print(line('Arguments for Positional-or-Keyword Parameters'))
+            j = 0 if spec.defaults is None else len(spec.defaults)
+            j -= len(spec.args)
+            for x in poskey:
+                print(x, '=', poskey[x], end='')
+                if j >= 0:
+                    print('  (default = ', spec.defaults[j], ')', sep='')
+                else:
+                    print('')
+                j += 1
 
-            # build dict for arguments for var-keyword parameters
-            varkey = local['kwargs']
-            if len(varkey) > 0:
-                print(line('Arguments for Var-Keyword Parameters'))
-                print(spec.varkw, '-->\n{')
-                for x in varkey:
-                    print('   ', x, '=', varkey[x])
-                print('}')
+        # build tuple for arguments for var-positional parameters
+        varpos = local['args'][i:]
+        if len(varpos) > 0:
+            print(line('Arguments for Var-Positional Parameters'))
+            print(spec.varargs, '-->', varpos)
 
-            print(line('Finish Catching Arguments Passed to Function %s()'
-                       % f.__name__, p=':'))
-            return f(*args, **kwargs)
-        return g
+        # build dict for arguments for keyword-only parameters
+        keyonly = {}
+        for x in spec.kwonlyargs:
+            try:
+                keyonly[x] = local['kwargs'][x]
+                del local['kwargs'][x]
+            except KeyError:
+                keyonly[x] = spec.kwonlydefaults[x]
+        if len(keyonly) > 0:
+            print(line('Arguments for Keyword-Only Parameters'))
+            for x in keyonly:
+                print(x, '=', keyonly[x], end='')
+                if x in spec.kwonlydefaults:
+                    print('  (default = ', spec.kwonlydefaults[x], ')',
+                          sep='')
+                else:
+                    print('')
 
-    def dont(f):
-        def g(*args, **kwargs):
-            return f(*args, **kwargs)
-        return g
+        # build dict for arguments for var-keyword parameters
+        varkey = local['kwargs']
+        if len(varkey) > 0:
+            print(line('Arguments for Var-Keyword Parameters'))
+            print(spec.varkw, '-->\n{')
+            for x in varkey:
+                print('   ', x, '=', varkey[x])
+            print('}')
 
-    return do if debug else dont
+        print(line('Finish Catching Arguments Passed to Function %s()'
+                   % f.__name__, p=':'))
+        return f(*args, **kwargs)
+    return g
 
 
-@catch()  # equivalent to @catch(debug=True)
+@catch
 def foo(a, b=500, *c, d=50, e, f=5, **g):
     """
-    Function to test decorator @catch().
+    Function to test decorator @catch.
 
     | parameter name     | type                  | with default value |
     | ------------------ | --------------------- | ------------------ |
