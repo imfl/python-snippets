@@ -6,12 +6,14 @@ https://guides.github.com/features/mastering-markdown/
 
 """
 
+# Date :
+
 import codecs
-import fileinput
 import os.path
 import shutil
 
 from catch import catch
+from inplace import inplace
 
 
 __all__ = ['auto_toc']
@@ -136,22 +138,21 @@ def auto_toc(filename, has_title, has_toc_header, toc_header, override):
     # write file
     print('\nMaking / Updating TOC for %d headers ...' % len(headers))
     i = 1
-    for line in fileinput.input(filename, inplace=1):
+    for line, new in inplace(filename):
         # insert at the beginning, if applicable
         if toc_line == 0 and i == 1:
             if toc_header is not None:
-                print(toc_header)
-            print(toc)
+                line = toc_header + toc + line
+            line = toc + line
         # remove old toc
         if override and (i in to_remove):
-            pass
-        else:
-            print(line.rstrip())
+            line = ''
         # insert after toc line, if applicable
         if i == toc_line:
             if toc_header is not None:
-                print(toc_header)
-            print(toc.rstrip())
+                line += toc_header
+            line += toc
+        new.write(line)
         i += 1
 
     print('\nFinish ...')
@@ -162,26 +163,16 @@ if __name__ == '__main__':
     print('----- Make/Update Table of Contents (TOC) for Markdown Files -----')
     filename = input('Enter filename '
                      '(press ENTER for \'README.md\') : ')
-    has_title = input('Has header for title '
-                      '(press ENTER for YES, enter any key for no) ? ')
-    has_toc_header = input('Has header for table of contents '
-                           '(press ENTER for YES, enter any key for no) ? ')
+    has_title = input('Has header for title ? [Y]/N : ')
+    has_toc_header = input('Has header for table of contents ? [Y]/N : ')
     toc_header = input('Enter new TOC header '
                        '(press ENTER if none or no change) : ')
-    override = input('Override any existing TOC '
-                     '(press ENTER for YES, enter any key for no) ? ')
+    override = input('Override any existing TOC ? [Y]/N : ')
 
-    params = [filename, has_title, has_toc_header, toc_header, override]
-    default = ['README.md', True, True, None, True]
-    otherwise = []
+    filename = filename if len(filename) > 0 else 'README.md'
+    has_title = False if has_title.upper() == 'N' else True
+    has_toc_header = False if has_toc_header.upper() == 'N' else True
+    toc_header = toc_header if len(toc_header) > 0 else None
+    override = False if override.upper() == 'N' else True
 
-    for i in range(len(params)):
-        if len(params[i]) == 0:
-            print('set to default (%d) : ' % i, default[i])
-            params[i] = default[i]
-
-    params[1] = bool(params[1])
-    params[2] = bool(params[2])
-    params[4] = bool(params[4])
-
-    auto_toc(*params)
+    auto_toc(filename, has_title, has_toc_header, toc_header, override)
