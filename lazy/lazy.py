@@ -19,7 +19,7 @@ Import and add @lazy decorator above your original function definition, like:
         ...
 '''
 
-# Author: Fu Lei <lei.fu@connect.ust.hk>
+# Author: Fu Lei <lei dot fu at connect dot ust dot hk>
 
 # Date: 18/06/09 = Sat
 

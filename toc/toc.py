@@ -3,10 +3,11 @@
 References
 ----------
 https://guides.github.com/features/mastering-markdown/
-
 """
 
-# Date :
+# Date : 18/06/22 = Mon
+
+# Author: Fu Lei <lei dot fu at connect dot ust dot hk>
 
 import codecs
 import os.path
