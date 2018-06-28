@@ -29,6 +29,3 @@ A decorator that catches parameter names, parameter categories, and values of th
 - [Lazy Function Call](lazy/lazy.py)
 - [Generate Lagged Values](lag/lag.py)
 - [Catching Arguments](catch/catch.py)
-
-_
-
